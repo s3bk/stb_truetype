@@ -530,9 +530,9 @@ impl<Data: Deref<Target = [u8]>> FontInfo<Data> {
 
                 {
                     let item = (search - end_count) >> 1;
-                    assert!(
-                        unicode_codepoint <= BE::read_u16(&data[end_count + 2 * item..]) as u32
-                    );
+                    if unicode_codepoint > BE::read_u16(&data[end_count + 2 * item..]) as u32 {
+                        return 0;
+                    }
                     let start = BE::read_u16(&index_map[14 + segcount * 2 + 2 + 2 * item..]) as u32;
                     if unicode_codepoint < start {
                         return 0;
